@@ -45,7 +45,7 @@ The dataset consists of **4,238 patient records** with demographic, behavioral, 
 - Build a **Logistic Regression** model
 - Use **GridSearchCV** to tune hyperparameters
 - Apply **class balancing techniques** to handle imbalanced data
-- Evaluate model using classification metrics like accuracy, recall, F1-score, and ROC-AUC
+- Evaluate model using classification metrics like accuracy, recall, F1-score.
 
 ---
 
@@ -68,6 +68,7 @@ The dataset consists of **4,238 patient records** with demographic, behavioral, 
 > While accuracy dropped from 85% to 68.5%, the recall for the minority class improved significantly — from **6% to 68%**, making the model much more reliable for medical screening.
 
 ---
+
 **🔍 Future Improvements**
 
 
