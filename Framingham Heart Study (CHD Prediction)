@@ -1,0 +1,52 @@
+# 📦 Importing necessary libraries
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.model_selection import train_test_split, GridSearchCV
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 🧮 Load the dataset
+df = pd.read_csv('Logistic reg.csv')  # Load CSV data into a DataFrame
+
+# 🧹 Data Cleaning
+df.fillna(df.mean(), inplace=True)    # Fill missing values with column mean
+df.drop(['education'], axis=1, inplace=True)  # Drop the 'education' column
+
+# 🧾 Inspect the dataset
+print(df.head())     # Show first 5 rows
+print(df.info())     # Print column info and data types
+
+# 🎯 Split dataset into independent (X) and dependent (y) variables
+x = df.iloc[:, :-1]  # All columns except the last one as features
+y = df.iloc[:, -1]   # Last column as the target
+
+# 🧪 Split the dataset into training and testing sets (73% train, 27% test)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.27, random_state=0)
+
+# ⚖️ Create a Logistic Regression model with class_weight='balanced' to handle class imbalance
+classifier = LogisticRegression(class_weight='balanced')
+
+# 🔍 Define hyperparameters to search for the best combination using GridSearchCV
+parameter = {
+    'penalty': ['l1', 'l2', 'elasticnet'],      # Regularization types
+    'C': [1, 2, 3, 4, 5, 6, 11, 23, 34, 45],    # Regularization strength
+    'max_iter': [100, 200, 300],                # Maximum number of iterations
+    'solver': ['liblinear', 'saga']             # Algorithms that support l1 and elasticnet
+}
+
+# 🔄 Perform grid search with cross-validation (cv=5) to tune hyperparameters
+classifier_reg = GridSearchCV(estimator=classifier, param_grid=parameter, scoring='accuracy', cv=5)
+
+# 🚂 Train the best model on training data
+classifier_reg.fit(x_train, y_train)
+
+# 📈 Predict on the test set using the best found model
+pred = classifier_reg.predict(x_test)
+
+# 📊 Evaluate model performance using accuracy
+acc = accuracy_score(y_test, pred)
+print("Accuracy:", acc)
+
+# 🧾 Show a detailed classification report (precision, recall, F1-score)
+print(classification_report(y_test, pred))
